@@ -1,4 +1,6 @@
-csci135
-=======
+sudoku_solver
+=============
 
-CSCI 135 shit 
+Sudoku Solver for CSCI 135. 
+
+Code likely will suck balls. 
