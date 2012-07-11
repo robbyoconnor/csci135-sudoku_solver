@@ -9,43 +9,45 @@ Modifications:
 
 #include "Game.h"
 #include <iostream>
+#include <cstdlib>
+#include <new>
 #define ROWS 9
 #define COLS 9
 #define DEPTH 9 // for candidates array
-
+// for initializing the candidates array this was immensely useful:
+// http://stackoverflow.com/a/3969704/1508101
 Game::Game() {
-    Board b;
-    for(int i=0;i<ROWS;i++) {
-        for(int j=0;j<ROWS;j++) {
-            candidates[i][j] = new bool[COLS]();
-            for(int k=0;k<DEPTH;k++) {
-                candidates[i][j][k] = new bool[ROWS][COLS][DEPTH](); // initialize the candidates array
-           }
+    definites = new int*[ROWS]();
+    candidates = new bool**[ROWS]();
+    if(definites && candidates) { // just check to make sure.
+        for(int i=0;i<ROWS;i++) {
+            definites[i] = new int[COLS]();
+            candidates[i] = new bool*[COLS]();
+            for(int j=0;j<COLS;j++) {
+                candidates[i][j] = new bool[DEPTH]();
+            }
         }
     }
 }
-
 Game::~Game() {
+    using namespace std;
     // this is gonna be hairy...
     // time to clean up and delete pointers!
+    cerr<<"freeing all pointers...";
     for(int i=0;i<ROWS;i++) {
-        for(int j=0;j<ROWS;j++) {
-          delete[] candidates[i][j];
+        for(int j=0;j<COLS;j++) {
+            delete[] candidates[i][j];
+            candidates[i][j] = NULL;
+
         }
     }
     delete[] candidates;
+    delete[] definites;
+    candidates = NULL;
+    definites = NULL;
+
+    cerr<<"done"<<endl;
 }
-
-Board Game::getBoard() {
-    return board;
-}
-
-void Game::setBoard(Board b) {
-    board = b;
-}
-
-
-
 
 void Game::solve() {
     using namespace std;
@@ -59,9 +61,9 @@ void Game::solve() {
         for(int j=0;j<COLS;j++) {
             for(int k=1;k<10;k++) {
                 if(isCandidate(k,i,j)) {
-                    if((board.getBoard()[i][j] > 0) && validateRow(k,i) && validateColumn(k,j) && validateBox(k,i,j)) {
+                    if((definites[i][j] > 0) && validateRow(k,i) && validateColumn(k,j) && validateBox(k,i,j)) {
                         setCandidateValue(k,i,j,true); // clear it as a candidate...
-                        board.getBoard()[i][j] = k;
+                        definites[i][j] = k;
                     } else {
                         continue;
                     }
@@ -77,7 +79,7 @@ void Game::solve() {
 // mainly the functions to validate rows, columns and boxes separated...
 bool Game::validateRow(int number, int row) {
     for(int col=0;col<COLS;col++) {
-        if(board.getBoard()[row][col] == number) {
+        if(definites[row][col] == number) {
             return false;
         }
     }
@@ -86,26 +88,28 @@ bool Game::validateRow(int number, int row) {
 
 bool Game::validateColumn(int number, int col) {
     for(int row=0;row<ROWS;row++) {
-        if(board.getBoard()[row][col] == number) {
+        if(definites[row][col] == number) {
             return false;
         }
     }
     return true;
 }
 
-bool Game::validateBox(int number, int row, int col) {
+bool Game::validateBox(int number,int row,int col){
+    using namespace std;
     // The algorithm for handling the boxes was inspired from: http://stackoverflow.com/a/4718285/1508101
-    int bx = (row/3)*3;
-    int by = (col/3)*3;
-    for(;bx<bx+3;bx++) {
-        for(;by+3;by++) {
-            if(board.getBoard()[bx][by] == number) {
+    int bx=(row/3)*3;
+    int by=(col/3)*3;
+    for(;bx<bx+3;bx++){
+        for(;by+3;by++){
+            if(definites[bx][by]==number){
                 return false;
             }
         }
     }
     return true;
 }
+
 
 void Game::setCandidateValue(int number, int row, int col, bool clear=false) {
     // number *MUST* be between 1 and 9.
@@ -160,4 +164,61 @@ bool Game::isCandidate(int number, int row, int col) {
             }
         }
     }
+}
+
+bool Game::isSolved() {
+    for(int i=0;i<ROWS;i++) {
+        for(int j=0;j<COLS;j++) {
+            if(!definites[i][j] > 0)
+                return false;
+        }
+    }
+    return true;
+}
+void Game::enterBoard() {
+    using namespace std;
+    char c;
+    for(int i=0;i<ROWS;i++) {
+        for(int j=0;j<COLS;j++) {
+            cin >> c;
+            if(c != '?') {
+              definites[i][j] = (int)c - '0';
+            }
+        }
+    }
+}
+
+void Game::printBoard(bool printCandidates){
+    using namespace std;
+    /**
+        +-----------------------------+
+        | 6  7  2 | 1  4  5 | 3  9  8 |
+        | 1  4  5 | 9  8  3 | 6  7  2 |
+        | 3  8  9 | 7  6  2 | 4  5  1 |
+        |---------------------------- |
+        | 2  6  3 | 5  7  4 | 8  1  9 |
+        | 9  5  8 | 6  2  1 | 7  4  3 |
+        | 7  1  4 | 3  9  8 | 5  2  6 |
+        |-----------------------------|
+        | 5  9  7 | 2  3  6 | 1  8  4 |
+        | 4  2  6 | 8  1  7 | 9  3  5 |
+        | 8  3  1 | 4  5  9 | 2  6  7 |
+        +-----------------------------+
+     */
+    cout<<"+-----------------------------------+"<<endl;
+    for(int i=0;i<ROWS;i++) {
+        cout<<"| ";
+        for(int j=0;j<COLS;j++) {
+            cout<<definites[i][j]<< " ";
+
+
+        }
+        cout<<endl;
+    }
+    cout<<"+-----------------------------------+"<<endl;
+}
+
+void Game::printBox(int row, int col, bool showCandidates) {
+
+
 }

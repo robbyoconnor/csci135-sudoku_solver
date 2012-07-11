@@ -7,7 +7,7 @@ checking candidate values and eliminating them.
  *******************************************************************************/
 #ifndef GAME_H
 #define GAME_H
-#include "Board.h"
+
 
 class Game{
   public:
@@ -18,35 +18,33 @@ class Game{
     ~Game();
 
     /**
-     * Retrieve the current representation of the board.
-     *
-     */
-    Board getBoard();
-
-    /**
-     * Set the current representation of the board.
-     *
-     */
-    void setBoard(Board board);
-
-
-    /**
      * This function will handle the heavy lifting of checking for candidate values and eliminating those candidates.
      * This is the sole function (aside from accessors and mutators for the Board field) that are exposed to the client.
      *
      */
     void solve();
+
+    /**
+    * Handles getting the board from the user and processing it.
+    */
+   void enterBoard();
+
+   /**
+    * Pretty print the board to the screen.
+    * @param printCandidates whether or not to print candidates (Default value is false).
+    *
+    */
+   void printBoard(bool printCandidates);
+
 /************************/
 
 /** private members */
   private:
-    // the final representation that will be written out
-    // only thing exposed to the client.
-    Board board;
+    int **definites;
 
     // used to generate the possible "candidate" values for given squares.
     // not exposed to the client.
-    bool *candidates[9][9];
+    bool ***candidates;
 
 
     /**
@@ -105,5 +103,14 @@ class Game{
      * @return true if its a candidate false otherwise.
      */
    bool isCandidate(int number, int row, int col);
+
+   /**
+    *
+    * Checks for a solved board.
+    *
+    */
+   bool isSolved();
+
+   void printBox(int row, int col, bool showCandidates);
 };
 #endif
