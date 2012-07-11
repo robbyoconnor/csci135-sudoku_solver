@@ -96,19 +96,18 @@ bool Game::validateColumn(int number, int col) {
 }
 
 bool Game::validateBox(int number,int row,int col){
-    using namespace std;
-    // The algorithm for handling the boxes was inspired from: http://stackoverflow.com/a/4718285/1508101
-    int bx=(row/3)*3;
-    int by=(col/3)*3;
-    for(;bx<bx+3;bx++){
-        for(;by+3;by++){
-            if(definites[bx][by]==number){
+
+    row=(row/3) * 3;
+    col=(col/3) * 3;
+
+    for(int r=0;r<3;r++)
+        for(int c=0;c<3;c++)
+            if(definites[row+r][col+c]==number)
                 return false;
-            }
-        }
-    }
+
     return true;
 }
+
 
 
 void Game::setCandidateValue(int number, int row, int col, bool clear=false) {
