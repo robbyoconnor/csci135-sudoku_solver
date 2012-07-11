@@ -52,12 +52,12 @@ Game::~Game() {
 void Game::solve() {
     using namespace std;
     // first determine the candidate values for each cell in each row and each column (this covers the 9x9 sub-grids)
-    cout<<"Adding all candidates to the puzzle...";
+    cout<<"Adding all candidates to the puzzle..."
     determineCandidates();
     cout<<"done."<<endl;
     // now we try and eliminate candidates -- once checked, we must clear them from the candidates/
     for(int i=0;i<ROWS;i++) {
-        cout<<"Eliminating candidates from puzzle...";
+        cout<<"Eliminating candidates from puzzle..."<<endl;
         for(int j=0;j<COLS;j++) {
             for(int k=1;k<10;k++) {
                 if(isCandidate(k,i,j)) {
