@@ -65,7 +65,6 @@ void Game::solve(){
                 if(isCandidate(k,i,j)){
                     if(!(definites[i][j]>0)&&validateRow(k,i)&&validateColumn(k,j)&&validateBox(k,i,j)){
                         setCandidateValue(k,i,j,true);// clear it as a candidate...
-                        cerr<<k<<" is a definite solution"<<endl;
                         definites[i][j]=k;
                     }else{
                         continue;
@@ -84,6 +83,7 @@ void Game::solve(){
 bool Game::validateRow(int number,int row){
     for(int col=0;col<COLS;col++){
         if(definites[row][col]==number){
+
             return false;
         }
     }
@@ -92,7 +92,7 @@ bool Game::validateRow(int number,int row){
 
 bool Game::validateColumn(int number,int col){
     for(int row=0;row<ROWS;row++){
-        if(definites[row][col]==number){
+        if(definites[col][row]==number){
             return false;
         }
     }
@@ -129,13 +129,15 @@ void Game::determineCandidates(){
     for(int i=0;i<ROWS;i++){
         for(int j=0;j<COLS;j++){
             for(int k=1;k<10;k++){
-                if(validateRow(j,i)){
+                if(validateRow(k,i)){
                     if(validateColumn(k,j)){
                         if(validateBox(k,i,j)){
                             // so it meets all criteria...let's add it.
                             setCandidateValue(k,i,j);
                         }
                     }
+                } else {
+                    return; // be explicit I guess??
                 }
             }
         }
