@@ -105,7 +105,7 @@ bool Game::validateBox(int number,int row,int col){
 
     for(int i=0;i<3;i++)
         for(int j=0;j<3;j++)
-            if(definites[row][col]==number)
+            if(definites[row+i][col+j]==number)
                 return false;
 
     return true;
