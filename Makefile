@@ -1,5 +1,5 @@
 CC=g++
-FILES=Game.cc main.cc
+FILES=Sudoku.cc Board.cc main.cc
 sudoku:
 	$(CC) -g $(FILES) -o sudoku
 

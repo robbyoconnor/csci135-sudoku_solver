@@ -7,7 +7,7 @@ Usage: sudoku
 Build with: make
 Modifications:
  ******************************************************************************/
-#include "Game.h"
+#include "Sudoku.h"
 #include <iostream>
 #include <string>
 
@@ -15,10 +15,10 @@ Modifications:
 #define COLS 9
 using namespace std;
 
-string enterDefinites(Game g);
+string enterDefinites(Sudoku g);
 
 int main(int argc,char *argv[]){
-    Game g;
+    Sudoku g;
     cout<<"This program will attempt to find the solution to";
     cout<<"user-defined Sudoku puzzles. If a solution cannot be found,";
     cout<<"all possible candidates for each cell will be shown."<<endl;
