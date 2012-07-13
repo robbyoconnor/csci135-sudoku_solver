@@ -126,7 +126,7 @@ void Board::printBoard(bool showCandidates){
 bool Board::validateRow(int number,int row){
    for (int i = 0; i < ROWS; i++) {
         if(this->board[i][row]==number) {
-            std::cout<<std::endl<<number<<" exists in row "<<row<<std::endl;
+            std::cout<<std::endl<<number<<" exists in row "<<row<<std::endl; //TODO: remove
             return false;
         }
     }
@@ -136,7 +136,7 @@ bool Board::validateRow(int number,int row){
 bool Board::validateColumn(int number,int col){
     for (int i = 0; i < ROWS; i++) {
         if(this->board[i][col]==number) {
-            std::cout<<std::endl<<number<<" exists in column "<<col<<std::endl;
+            std::cout<<std::endl<<number<<" exists in column "<<col<<std::endl; //TODO: remove
             return false;
         }
     }
@@ -149,36 +149,37 @@ bool Board::validateBox(int number,int row,int col){
     for(int i=0;i<3;i++)
         for(int j=0;j<3;j++)
             if(this->board[row+i][col+i] > 0 && this->board[row+i][col+j]==number) {
-                std::cout<<std::endl<<number<<" exists in the box enclosed by "<<row<<" and "<<col<<std::endl;
-                std::cout<<"Coordinates within the box is ("<<(row+i)<<","<<(col+i)<<")"<<std::endl;
+                std::cout<<std::endl<<number<<" exists in the box enclosed by "<<row<<" and "<<col<<std::endl; //TODO: remove
+                std::cout<<"Coordinates within the box is ("<<(row+i)<<","<<(col+i)<<")"<<std::endl; //TODO: remove
                 return false;
             }
     return true;
 
 }
 void Board::determineCandidates(){
-    using namespace std;
+    using namespace std; //TODO: remove
     // we short-cut if one of these fails -- it is assumed all will fail
     for(int i=0;i<ROWS;i++){
         for(int j=0;j<COLS;j++){
-            cerr<<"\nCandidates found for cell ("<<i<<","<<j<<"):";
+
+            cerr<<"\nCandidates found for cell ("<<i<<","<<j<<"):"; //TODO: remove
             for(int k=1;k<10;k++){
                 if(this->board[i][j] == 0 && validateRow(k,i) && validateColumn(k,j) && validateBox(k,i,j)){
                     // so it meets this criteria...let's add it.
-                     cerr<<k<<" ";
+                     cerr<<k<<" "; //TODO REMOVE
                     setCandidateValue(k,i,j,false);
                 }
             }
         }
-        cerr<<endl;
+        cerr<<endl; //TODO: remove
     }
     for(int i=0;i<ROWS;i++) {
         for(int j=0;j<COLS;j++) {
-            cout<<"\nCandidates for cell ("<<i<<","<<j<<") is: ";
+            cout<<"\nCandidates for cell ("<<i<<","<<j<<") is: "; //TODO REMOVE
             for(int k=0;k<DEPTH;k++) {
-                cout<<candidates[i][j][k]<<" ";
+                cout<<candidates[i][j][k]<<" "; //TODO: remove
             }
-            cout<<endl;
+            cout<<endl; //TODO: remove
         }
     }
 }
