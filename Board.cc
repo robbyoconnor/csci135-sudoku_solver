@@ -182,16 +182,16 @@ void Board::determineCandidates(){
     for(int i=0;i<ROWS;i++){
         for(int j=0;j<COLS;j++){
 
-            cerr<<"\nCandidates found for cell ("<<i<<","<<j<<"):"; //TODO: remove
+            clog<<"\nCandidates found for cell ("<<i<<","<<j<<"):"; //TODO: remove
             for(int k=1;k<10;k++){
                 if(this->isBoardValid(k,i,j)){
                     // so it meets this criteria...let's add it.
-                     cerr<<k<<" "; //TODO REMOVE
+                     clog<<k<<" "; //TODO REMOVE
                     setCandidateValue(k,i,j,false);
                 }
             }
         }
-        cerr<<endl; //TODO: remove
+        clog<<endl; //TODO: remove
     }
     for(int i=0;i<ROWS;i++) {
         for(int j=0;j<COLS;j++) {
