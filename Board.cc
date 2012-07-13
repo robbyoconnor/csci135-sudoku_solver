@@ -134,8 +134,9 @@ bool Board::validateBox(int number,int row,int col){
 }
 
 bool Board::isBoardValid(int number,int row,int col){
-    return this->board[row][col]==0 && validateBox(number,row,col) &&
+    bool valid = this->board[row][col]==0 && validateBox(number,row,col) &&
         validateColumn(number,col)&& validateRow(number,row);
+    std::cout<<"\nIs value valid for value: "<<number<<"? "<<(valid ? "yes" : "no")<<std::endl; //TODO REMOVE
 }
 void Board::setCandidateValue(int number,int row,int col,bool clear){
     // number *MUST* be between 1 and 9.
@@ -153,6 +154,7 @@ void Board::setCandidateValue(int number,int row,int col,bool clear){
 
 
 bool Board::isCandidate(int number,int row,int col){
+    using namespace std; // TODO REMOVE!!!
     // number *MUST* be between 1 and 9.
     // checked both bounds in separate if statements for clarity.
     if(!(number>9||row>9||col>9)){
@@ -160,9 +162,13 @@ bool Board::isCandidate(int number,int row,int col){
             // Handle the number 1 different than all others so we don't go out of bounds.
             if(number==1){
                 if(this->candidates[row][col][0]>0){
+                    clog<<"in isCandidate()"<<endl; //TODO remove
+                    clog<<this->candidates[row][col][0]<< " is a candidate...time to test it!"<<endl;; //TODO REMOVE
                     return true;
                 }
             }else{
+                clog<<"in isCandidate()"<<endl; //TODO remove
+                clog<<this->candidates[row][col][number-1]<< " is a candidate...time to test it!"<<endl;; //TODO REMOVE
                 return this->candidates[row][col][number-1]>0;
 
             }
@@ -212,11 +218,14 @@ void Board::solve(){
                 if(isCandidate(k,i,j)){
                     if(isBoardValid(k,i,j)){
                         this->board[i][j]=k;
+                        setCandidateValue(k,i,j,true);
                         }
                     }
                 }
             }
         }
+
+
     cout<<"done."<<endl;
     cout<<"No more candidates to eliminate."<<endl;
 }
