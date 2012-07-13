@@ -7,7 +7,7 @@ Description: Board class for Sudoku game.
 #ifndef BOARD_H
 #define BOARD_H
 
-class Board{ 
+class Board{
   public:
     /** constructors **/
     Board();
@@ -19,14 +19,6 @@ class Board{
      * Current representation of the board.
      */
     int** getBoard();
-
-    /**
-     * Set the current representation of the board.
-     *
-     * @param board the board that will represent the final layout of the solved or incomplete board.
-     */
-    void setBoard(int **board);
-
 
 
    /**
