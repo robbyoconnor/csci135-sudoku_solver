@@ -57,30 +57,6 @@ int** Board::getBoard() {
     return this->board;
 }
 
-void Board::solve(){
-    using namespace std;
-    // first determine the candidate values for each cell in each row and each column (this covers the 9x9 sub-grids)
-    cout<<"Adding all candidates to the puzzle...";
-    determineCandidates();
-    cout<<"done."<<endl;
-    // now we try and eliminate candidates -- once checked, we must clear them as a candidate.
-    for(int i=0;i<ROWS;i++){
-        cout<<"Eliminating candidates from puzzle..."<<endl;
-        for(int j=0;j<COLS;j++){
-            for(int k=1;k<10;k++){
-                if(isCandidate(k,i,j)){
-                    if(this->board[i][j]==0&& validateRow(k,i)&&validateColumn(k,j)&& validateBox(k,i,j)){
-                        setCandidateValue(k,i,j,true);// clear it as a candidate...
-                        this->board[i][j]=k;
-                    }
-                }
-            }
-        }
-    }
-    cout<<"done."<<endl;
-    cout<<"No more candidates to eliminate."<<endl;
-}
-
 void Board::printBoard(bool showCandidates){
     using namespace std;
 
@@ -156,34 +132,11 @@ bool Board::validateBox(int number,int row,int col){
     return true;
 
 }
-void Board::determineCandidates(){
-    using namespace std; //TODO: remove
-    // we short-cut if one of these fails -- it is assumed all will fail
-    for(int i=0;i<ROWS;i++){
-        for(int j=0;j<COLS;j++){
 
-            cerr<<"\nCandidates found for cell ("<<i<<","<<j<<"):"; //TODO: remove
-            for(int k=1;k<10;k++){
-                if(this->board[i][j] == 0 && validateRow(k,i) && validateColumn(k,j) && validateBox(k,i,j)){
-                    // so it meets this criteria...let's add it.
-                     cerr<<k<<" "; //TODO REMOVE
-                    setCandidateValue(k,i,j,false);
-                }
-            }
-        }
-        cerr<<endl; //TODO: remove
-    }
-    for(int i=0;i<ROWS;i++) {
-        for(int j=0;j<COLS;j++) {
-            cout<<"\nCandidates for cell ("<<i<<","<<j<<") is: "; //TODO REMOVE
-            for(int k=0;k<DEPTH;k++) {
-                cout<<candidates[i][j][k]<<" "; //TODO: remove
-            }
-            cout<<endl; //TODO: remove
-        }
-    }
+bool Board::isBoardValid(int number,int row,int col){
+    return this->board[row][col]==0 && validateBox(number,row,col) &&
+        validateColumn(number,row,col)&& validateBox(number,row,col);
 }
-
 void Board::setCandidateValue(int number,int row,int col,bool clear){
     // number *MUST* be between 1 and 9.
     if(!(number>9||row>9||col>9)){
@@ -215,6 +168,57 @@ bool Board::isCandidate(int number,int row,int col){
             }
         }
     }
+}
+
+void Board::determineCandidates(){
+    using namespace std; //TODO: remove
+    // we short-cut if one of these fails -- it is assumed all will fail
+    for(int i=0;i<ROWS;i++){
+        for(int j=0;j<COLS;j++){
+
+            cerr<<"\nCandidates found for cell ("<<i<<","<<j<<"):"; //TODO: remove
+            for(int k=1;k<10;k++){
+                if(this->isBoardValid(k,i,j)){
+                    // so it meets this criteria...let's add it.
+                     cerr<<k<<" "; //TODO REMOVE
+                    setCandidateValue(k,i,j,false);
+                }
+            }
+        }
+        cerr<<endl; //TODO: remove
+    }
+    for(int i=0;i<ROWS;i++) {
+        for(int j=0;j<COLS;j++) {
+            cout<<"\nCandidates for cell ("<<i<<","<<j<<") is: "; //TODO REMOVE
+            for(int k=0;k<DEPTH;k++) {
+                cout<<candidates[i][j][k]<<" "; //TODO: remove
+            }
+            cout<<endl; //TODO: remove
+        }
+    }
+}
+
+void Board::solve(){
+    using namespace std;
+    // first determine the candidate values for each cell in each row and each column (this covers the 9x9 sub-grids)
+    cout<<"Adding all candidates to the puzzle...";
+    determineCandidates();
+    cout<<"done."<<endl;
+    // now we try and eliminate candidates -- once checked, we must clear them as a candidate.
+    for(int i=0;i<ROWS;i++){
+        cout<<"Eliminating candidates from puzzle..."<<endl;
+        for(int j=0;j<COLS;j++){
+            for(int k=1;k<10 && !isSolved(); k++){
+                if(isCandidate(k,i,j)){
+                    if(isBoardValid(k,i,j)){
+                        this->board[i][j]=k;
+                        }
+                    }
+                }
+            }
+        }
+    cout<<"done."<<endl;
+    cout<<"No more candidates to eliminate."<<endl;
 }
 
 bool Board::isSolved(){
