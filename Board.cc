@@ -37,7 +37,7 @@ Board::~Board(){
     using namespace std;
     // this is gonna be hairy...
     // time to clean up and delete pointers!
-    cerr<<"freeing all pointers...";
+    clog<<"freeing all pointers...";
     for(int i=0;i<ROWS;i++){
         for(int j=0;j<COLS;j++){
             delete[] this->candidates[i][j];
@@ -50,7 +50,7 @@ Board::~Board(){
     this->candidates=NULL; // prevent dangling pointers
     this->board=NULL; // prevent dangling pointers
 
-    cerr<<"done."<<endl;
+    clog<<"done."<<endl;
 }
 
 int** Board::getBoard() {
