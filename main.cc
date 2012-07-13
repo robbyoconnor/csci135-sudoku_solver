@@ -18,7 +18,7 @@ using namespace std;
 string enterDefinites(Sudoku g);
 
 int main(int argc,char *argv[]){
-    Sudoku g;
+    Sudoku sudoku;
     cout<<"This program will attempt to find the solution to";
     cout<<"user-defined Sudoku puzzles. If a solution cannot be found,";
     cout<<"all possible candidates for each cell will be shown."<<endl;
@@ -26,9 +26,9 @@ int main(int argc,char *argv[]){
     cout<<"Enter the starting state of the Sudoku puzzle."<<endl;
     cout<<"line by line with no spaces between each tile."<<endl;
     cout<<"If a tile is empty, enter \'?\'"<<endl;
-    g.enterBoard();
-    g.printBoard(false);
-    g.solve();
-    g.printBoard(true);
+    sudoku.enterBoard();
+    sudoku.printBoard(false);
+    sudoku.solve();
+    sudoku.printBoard(true);
     return 0;
 }

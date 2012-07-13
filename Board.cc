@@ -124,9 +124,9 @@ bool Board::validateBox(int number,int row,int col){
     col=(col/3) * 3;
     for(int i=0;i<3;i++)
         for(int j=0;j<3;j++)
-            if(this->board[row+i][col+i] > 0 && this->board[row+i][col+j]==number) {
+            if(this->board[row+i][col+j] > 0 && this->board[row+i][col+j]==number) {
                 std::cout<<std::endl<<number<<" exists in the box enclosed by "<<row<<" and "<<col<<std::endl; //TODO: remove
-                std::cout<<"Coordinates within the box is ("<<(row+i)<<","<<(col+i)<<")"<<std::endl; //TODO: remove
+                std::cout<<"Coordinates within the box is ("<<(row+i)<<","<<(col+j)<<")"<<std::endl; //TODO: remove
                 return false;
             }
     return true;
@@ -135,7 +135,7 @@ bool Board::validateBox(int number,int row,int col){
 
 bool Board::isBoardValid(int number,int row,int col){
     return this->board[row][col]==0 && validateBox(number,row,col) &&
-        validateColumn(number,row,col)&& validateBox(number,row,col);
+        validateColumn(number,col)&& validateRow(number,row);
 }
 void Board::setCandidateValue(int number,int row,int col,bool clear){
     // number *MUST* be between 1 and 9.

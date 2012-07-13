@@ -51,6 +51,7 @@ class Board{
     // used to generate the possible "candidate" values for given squares.
     // not exposed to the client.
     bool ***candidates;
+    
     /**
      * Validate a given row
      * @param number the number to search for
@@ -124,5 +125,5 @@ class Board{
      *
      */
     bool isSolved();
-} ;
+};
 #endif
