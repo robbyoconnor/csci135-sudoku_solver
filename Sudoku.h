@@ -31,6 +31,7 @@ class Sudoku{
    void printBoard(bool printCandidates);
 
   private:
+    // the board -- all functionality is there.
     Board board;
 
 };
