@@ -34,7 +34,6 @@ Board::Board(){
 }
 
 Board::~Board(){
-    using namespace std;
     // this is gonna be hairy...
     // time to clean up and delete pointers!
     clog<<"freeing all pointers...";
@@ -58,7 +57,6 @@ int** Board::getBoard() {
 }
 
 void Board::printBoard(bool showCandidates, bool debug, int number, int row, int col){
-    using namespace std;
 
 
     string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -158,7 +156,6 @@ bool Board::isCandidate(int number,int row,int col){
 }
 
 void Board::initializeCandidates(){
-    using namespace std;
     cout<<"Adding candidates to the puzzle."<<endl;
     for(int i=0;i<ROWS;i++){
         for(int j=0;j<COLS;j++){
@@ -170,9 +167,9 @@ void Board::initializeCandidates(){
 }
 
 void Board::solve(){
-    initializeCandidates();
-    eliminateCandidates();
-    addDefinitesToBoard();
+    this->initializeCandidates();
+    this.eliminateCandidates();
+    this->addDefinitesToBoard();
 }
 bool Board::isSolved(){
     for(int i=0;i<ROWS;i++){
@@ -200,13 +197,12 @@ int Board::getNumberOfCandidatesFor(int row,int col) {
 }
 
 void Board::eliminateCandidates() {
-    using namespace std;
     for(int i=0;i<ROWS;i++) {
         cout<<"Eliminating candidates..."<<endl;
         for(int j=0;j<COLS;j++) {
             for(int k=0;k<DEPTH;k++) {
                 if(this->isCandidate(k,i,j) && !this->isBoardValid(k,i,j)) {
-                    setCandidateValue(k,i,j,true); // eliminate it as a candidate!
+                    this->setCandidateValue(k,i,j,true); // eliminate it as a candidate!
                 }
             }
         }
@@ -219,9 +215,9 @@ void Board::addDefinitesToBoard(){
     for(int i=0;i<ROWS;i++){
         for(int j=0;j<COLS;j++){
             for(int k=1;k<10&& !isSolved();k++){
-                if(!getNumberOfCandidatesFor(i,j)>1 && isCandidate(k,i,j)) {
+                if(!this->getNumberOfCandidatesFor(i,j)>1 && this->isCandidate(k,i,j)) {
                     this->board[i][j] = k;
-                    setCandidateValue(k,i,j,true); // clear it now.
+                    this->setCandidateValue(k,i,j,true); // clear it now.
                 }
             }
         }

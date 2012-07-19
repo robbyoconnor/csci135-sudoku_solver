@@ -14,8 +14,9 @@ Modifications:
 #define ROWS 9
 #define COLS 9
 
+using namespace std;
+
 void Sudoku::enterBoard(){
-    using namespace std;
     char c;
     for(int i=0;i<ROWS;i++){
         for(int j=0;j<COLS;j++){
