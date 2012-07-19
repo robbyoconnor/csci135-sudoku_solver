@@ -168,9 +168,10 @@ void Board::initializeCandidates(){
 
 void Board::solve(){
     this->initializeCandidates();
-    this.eliminateCandidates();
+    this->eliminateCandidates();
     this->addDefinitesToBoard();
 }
+
 bool Board::isSolved(){
     for(int i=0;i<ROWS;i++){
         for(int j=0;j<COLS;j++){
