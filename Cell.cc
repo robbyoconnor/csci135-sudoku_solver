@@ -12,10 +12,10 @@ Cell::Cell(int row, int col){
     this->col = col;
 }
 
-int getRow() {
+int Cell::getRow() {
     return this->row;
 }
 
-int getCol() {
+int Cell::getCol() {
     return this->col;
 }
