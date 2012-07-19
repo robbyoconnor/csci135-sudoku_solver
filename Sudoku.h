@@ -33,6 +33,5 @@ class Sudoku{
   private:
     // the board -- all functionality is there.
     Board board;
-
 };
 #endif

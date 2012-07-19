@@ -6,12 +6,13 @@ Description: Board represents one complete game of Board
 Modifications:
  ******************************************************************************/
 #include <iostream>
+#include <list>
 #include "Board.h"
 #define ROWS 9
 #define COLS 9
-#define DEPTH 9 // for candidates array
+#define DEPTH 10 // for candidates array -- 0th element is false always
 
-/** TODO: REMOVE DEBUGGING CODE!!!! */
+using namespace std;
 
 
 // for initializing the this->candidates array this was immensely useful:
@@ -57,7 +58,7 @@ int** Board::getBoard() {
     return this->board;
 }
 
-void Board::printBoard(bool showCandidates){
+void Board::printBoard(bool showCandidates, bool debug, int number, int row, int col){
     using namespace std;
 
 
@@ -89,8 +90,7 @@ void Board::printBoard(bool showCandidates){
                 cout<<"| ";
             }
             cout<<this->board[i][j]<<" ";
-
-        }
+               }
         cout<<"|"<<endl;
     }
     cout<<"+-----------------------+"<<endl;
@@ -102,7 +102,6 @@ void Board::printBoard(bool showCandidates){
 bool Board::validateRow(int number,int row){
    for (int i = 0; i < ROWS; i++) {
         if(this->board[i][row]==number) {
-            std::cout<<std::endl<<number<<" exists in row "<<row<<std::endl; //TODO: remove
             return false;
         }
     }
@@ -112,7 +111,6 @@ bool Board::validateRow(int number,int row){
 bool Board::validateColumn(int number,int col){
     for (int i = 0; i < ROWS; i++) {
         if(this->board[i][col]==number) {
-            std::cout<<std::endl<<number<<" exists in column "<<col<<std::endl; //TODO: remove
             return false;
         }
     }
@@ -125,8 +123,6 @@ bool Board::validateBox(int number,int row,int col){
     for(int i=0;i<3;i++)
         for(int j=0;j<3;j++)
             if(this->board[row+i][col+j] > 0 && this->board[row+i][col+j]==number) {
-                std::cout<<std::endl<<number<<" exists in the box enclosed by "<<row<<" and "<<col<<std::endl; //TODO: remove
-                std::cout<<"Coordinates within the box is ("<<(row+i)<<","<<(col+j)<<")"<<std::endl; //TODO: remove
                 return false;
             }
     return true;
@@ -135,18 +131,17 @@ bool Board::validateBox(int number,int row,int col){
 
 bool Board::isBoardValid(int number,int row,int col){
     bool valid = this->board[row][col]==0 && validateBox(number,row,col) &&
-        validateColumn(number,col)&& validateRow(number,row);
-    std::cout<<"\nIs value valid for value: "<<number<<"? "<<(valid ? "yes" : "no")<<std::endl; //TODO REMOVE
+        validateColumn(number,col) && validateRow(number,row);
+
+    return valid;
 }
+
 void Board::setCandidateValue(int number,int row,int col,bool clear){
     // number *MUST* be between 1 and 9.
     if(!(number>9||row>9||col>9)){
-        if(!(number<=0 || row<=0 || col<=0)){
-            if(number==1){
-                this->candidates[row][col][0]=(clear?0:1);
-            }else{
-                this->candidates[row][col][number-1]=(clear?0:1);
-            }
+        if(!(number>=1 || row<=0 || col<=0)){
+            this->candidates[row][col][number]=(clear?0:1);
+
         }
     }
 }
@@ -154,82 +149,32 @@ void Board::setCandidateValue(int number,int row,int col,bool clear){
 
 
 bool Board::isCandidate(int number,int row,int col){
-    using namespace std; // TODO REMOVE!!!
     // number *MUST* be between 1 and 9.
     // checked both bounds in separate if statements for clarity.
     if(!(number>9||row>9||col>9)){
         if(!(number<=0||row<=0||col<=0)){
-            // Handle the number 1 different than all others so we don't go out of bounds.
-            if(number==1){
-                if(this->candidates[row][col][0]>0){
-                    clog<<"in isCandidate()"<<endl; //TODO remove
-                    clog<<this->candidates[row][col][0]<< " is a candidate...time to test it!"<<endl;; //TODO REMOVE
-                    return true;
-                }
-            }else{
-                clog<<"in isCandidate()"<<endl; //TODO remove
-                clog<<this->candidates[row][col][number-1]<< " is a candidate...time to test it!"<<endl;; //TODO REMOVE
-                return this->candidates[row][col][number-1]>0;
-
-            }
+            return this->candidates[row][col][number]>0;
         }
     }
 }
 
-void Board::determineCandidates(){
-    using namespace std; //TODO: remove
-    // we short-cut if one of these fails -- it is assumed all will fail
+void Board::initializeCandidates(){
+    using namespace std;
+    cout<<"Adding candidates to the puzzle."<<endl;
     for(int i=0;i<ROWS;i++){
         for(int j=0;j<COLS;j++){
-
-            clog<<"\nCandidates found for cell ("<<i<<","<<j<<"):"; //TODO: remove
             for(int k=1;k<10;k++){
-                if(this->isBoardValid(k,i,j)){
-                    // so it meets this criteria...let's add it.
-                     clog<<k<<" "; //TODO REMOVE
-                    setCandidateValue(k,i,j,false);
-                }
+                this->candidates[i][j][k] = 1;
             }
-        }
-        clog<<endl; //TODO: remove
-    }
-    for(int i=0;i<ROWS;i++) {
-        for(int j=0;j<COLS;j++) {
-            cout<<"\nCandidates for cell ("<<i<<","<<j<<") is: "; //TODO REMOVE
-            for(int k=0;k<DEPTH;k++) {
-                cout<<candidates[i][j][k]<<" "; //TODO: remove
-            }
-            cout<<endl; //TODO: remove
         }
     }
 }
 
 void Board::solve(){
-    using namespace std;
-    // first determine the candidate values for each cell in each row and each column (this covers the 9x9 sub-grids)
-    cout<<"Adding all candidates to the puzzle...";
-    determineCandidates();
-    cout<<"done."<<endl;
-    // now we try and eliminate candidates -- once checked, we must clear them as a candidate.
-    for(int i=0;i<ROWS;i++){
-        cout<<"Eliminating candidates from puzzle..."<<endl;
-        for(int j=0;j<COLS;j++){
-            for(int k=1;k<10 && !isSolved(); k++){
-                if(isCandidate(k,i,j)){
-                    if(isBoardValid(k,i,j)){
-                        this->board[i][j]=k;
-                        setCandidateValue(k,i,j,true);
-                        }
-                    }
-                }
-            }
-        }
-
-
-    cout<<"done."<<endl;
-    cout<<"No more candidates to eliminate."<<endl;
+    initializeCandidates();
+    eliminateCandidates();
+    addDefinitesToBoard();
 }
-
 bool Board::isSolved(){
     for(int i=0;i<ROWS;i++){
         for(int j=0;j<COLS;j++){
@@ -238,4 +183,48 @@ bool Board::isSolved(){
         }
     }
     return true;
+}
+
+
+
+int Board::getNumberOfCandidatesFor(int row,int col) {
+    int count=0;
+    for(int i=0;i<ROWS;i++) {
+        for(int j=0;j<COLS;j++) {
+            for(int k=0;k<DEPTH;k++) {
+                if(this->candidates[i][j][k]>0)
+                    count++;
+            }
+        }
+    }
+    return count;
+}
+
+void Board::eliminateCandidates() {
+    using namespace std;
+    for(int i=0;i<ROWS;i++) {
+        cout<<"Eliminating candidates..."<<endl;
+        for(int j=0;j<COLS;j++) {
+            for(int k=0;k<DEPTH;k++) {
+                if(this->isCandidate(k,i,j) && !this->isBoardValid(k,i,j)) {
+                    setCandidateValue(k,i,j,true); // eliminate it as a candidate!
+                }
+            }
+        }
+    }
+    cout<<"done."<<endl;
+    cout<<"No more candidates to eliminate."<<endl;
+}
+
+void Board::addDefinitesToBoard(){
+    for(int i=0;i<ROWS;i++){
+        for(int j=0;j<COLS;j++){
+            for(int k=1;k<10&& !isSolved();k++){
+                if(!getNumberOfCandidatesFor(i,j)>1 && isCandidate(k,i,j)) {
+                    this->board[i][j] = k;
+                    setCandidateValue(k,i,j,true); // clear it now.
+                }
+            }
+        }
+    }
 }

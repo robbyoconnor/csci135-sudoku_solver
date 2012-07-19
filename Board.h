@@ -26,7 +26,7 @@ class Board{
      * @param printCandidates whether or not to print candidates (Default value is false).
      *
      */
-    void printBoard(bool printCandidates);
+    void printBoard(bool printCandidates,bool debug,int number, int row, int col);
 
     /**
      * This function will handle the heavy lifting of checking for candidate values and eliminating those candidates.
@@ -37,7 +37,7 @@ class Board{
 
     /************************/
 
-    /** private members and functions
+    /** private members and functions */
       private:
 
         /**
@@ -92,7 +92,6 @@ class Board{
      * Pre-conditions: number is between 1 and 9; row and column are positive and not greater than 9.
      * Post-condition; The candidate[row][column][number-1] contains a 1.
      *
-     * Note: row and column may be inverted.
      *
      * @param number the number to add
      * @param row the row in the board that this candidate corresponds to
@@ -105,7 +104,8 @@ class Board{
      * This function simply does in one goes through and sees what's not in each row...and adds that number
      * as a candidate
      */
-    void determineCandidates();
+    void initializeCandidates();
+
 
     /**
      * Determines if the given number is a candidate
@@ -125,5 +125,24 @@ class Board{
      *
      */
     bool isSolved();
+
+    /**
+     * How many candidates are left for a given row, col.
+     * @param row
+     * @param col
+     * @return the number of candidates left
+     */
+    int getNumberOfCandidatesFor(int row, int col);
+
+    /**
+     * Eliminates candidates if it is a given number.
+     *
+     */
+    void eliminateCandidates();
+    /**
+     * If only one candidate exists for a given cell then it is added to the board.
+     */
+    void addDefinitesToBoard(); 
+
 };
 #endif

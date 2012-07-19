@@ -32,6 +32,6 @@ void Sudoku::solve() {
 }
 
 void Sudoku::printBoard(bool showCandidates) {
-    this->board.printBoard(showCandidates);
+    this->board.printBoard(showCandidates,false,0,0,0);
 }
 
