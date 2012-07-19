@@ -6,7 +6,6 @@ Description: Board represents one complete game of Board
 Modifications:
  ******************************************************************************/
 #include <iostream>
-#include <list>
 #include "Board.h"
 #define ROWS 9
 #define COLS 9
