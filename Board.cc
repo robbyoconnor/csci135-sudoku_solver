@@ -6,6 +6,11 @@ Description: Board represents one complete game of Board
 Modifications:
  ******************************************************************************/
 #include <iostream>
+#include <map>
+#inclide <string>
+#include <ctime>
+#include <cstdlib>
+#include <string>
 #include "Board.h"
 #define ROWS 9
 #define COLS 9
@@ -59,8 +64,6 @@ int** Board::getBoard() {
 void Board::printBoard(bool showCandidates, bool debug, int number, int row, int col){
 
 
-    string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    //string symbols = "!@#$%^&*()[]{}|,.<>*-+~`:;_\\/";
 
     /** Prints the following:
       +-----------------------+
@@ -79,15 +82,25 @@ void Board::printBoard(bool showCandidates, bool debug, int number, int row, int
      */
     cout<<"+-----------------------+"<<endl;
     for(int i=0;i<9;i++){
-        if(i%3==0 && i>0) { // print the divider for all but the first iteration.
+        if(i%3==0&&i>0){ // print the divider for all but the first iteration.
             cout<<"-------------------------"<<endl;
         }
         for(int j=0;j<9;j++){
             if(j%3==0){
                 cout<<"| ";
             }
-            cout<<this->board[i][j]<<" ";
-               }
+            if(this->getNumberOfCandidatesFor(i,j)==1) {
+                cout<<this->board[i][j]<<" "; // output if we have a singular candidate
+            } else { // otherwise we put a place-holder
+                map<Cell,char> map = getPlaceHolders(); // get the placeholders
+                map<Cell,char>::iterator it = map.begin();
+                //for(;it!=map.end();it++)
+
+
+
+
+            }
+         }
         cout<<"|"<<endl;
     }
     cout<<"+-----------------------+"<<endl;
@@ -223,4 +236,36 @@ void Board::addDefinitesToBoard(){
             }
         }
     }
+}
+
+map<Cell,string> Board::getPlaceHolders() {
+
+    string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; // first will try and use this (shrinking it as we use it.
+    string symbols = "!@#$%^&*()[]{}|,.<>*-+~`:;_\\/"; // then go to this.
+    srand((unsigned)time(NULL)); // seed random number generator.
+    for(int i=0;i<ROWS;i++){
+        for(int j=0;j<COLS;j++){
+            for(int k=1;k<10&& !isSolved();k++){ // indices for candidates start at 1.
+                if(getNumberOfCandidatesFor(i,j)>1) {
+                    Cell c(i,j);
+                    char ch  = '';
+                    if(letters.length()>0) { // we randomly pick a letter and erase it.
+                        int idx = rand() % letters.length();
+                        ch = letters[idx];
+                        string::iterator it = letters.begin()+idx;
+                        letters.erase(it); // remove that letter.
+
+                    } else {
+                        int idx = rand() % symbols.length();
+                        ch = symbols[idx];
+                        string::iterator it = symbols.begin()+idx;
+                        symbols.erase(it); // remove that symbol.
+                    }
+                    map[c] = ch; // add it to the map
+
+                }
+            }
+        }
+    }
+    return map;
 }

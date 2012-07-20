@@ -7,6 +7,8 @@ Description: Board class for Sudoku game.
 #ifndef BOARD_H
 #define BOARD_H
 
+#include <map>
+
 class Board{
   public:
     /** constructors **/
@@ -139,10 +141,17 @@ class Board{
      *
      */
     void eliminateCandidates();
+
     /**
      * If only one candidate exists for a given cell then it is added to the board.
      */
-    void addDefinitesToBoard(); 
+    void addDefinitesToBoard();
+
+    /**
+     *  Helper function to get placeholder chars for each Cell.
+     *
+     */
+    std::map<Cell,std::string> getPlaceHolders();
 
 };
 #endif
