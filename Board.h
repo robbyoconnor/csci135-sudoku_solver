@@ -8,6 +8,7 @@ Description: Board class for Sudoku game.
 #define BOARD_H
 
 #include <map>
+#include "Cell.h"
 
 class Board{
   public:
@@ -146,12 +147,6 @@ class Board{
      * If only one candidate exists for a given cell then it is added to the board.
      */
     void addDefinitesToBoard();
-
-    /**
-     *  Helper function to get placeholder chars for each Cell.
-     *
-     */
-    std::map<Cell,std::string> getPlaceHolders();
 
 };
 #endif
