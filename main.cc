@@ -45,6 +45,9 @@ int main(int argc,char *argv[]){
             case 2:
                 done = true;
                 break;
+            default:
+                cout<<"Invalid selection."<<endl;
+                break;
 
         }
     }while(!done);
