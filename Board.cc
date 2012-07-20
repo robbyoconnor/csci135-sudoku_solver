@@ -6,12 +6,8 @@ Description: Board represents one complete game of Board
 Modifications:
  ******************************************************************************/
 #include <iostream>
-#include <ctime>
-#include <cstdlib>
-#include <string>
-#include <sstream>
-#include <vector>
 #include "Board.h"
+
 #define ROWS 9
 #define COLS 9
 #define DEPTH 10 // for candidates array -- 0th element is false always
@@ -40,7 +36,6 @@ Board::Board(){
 Board::~Board(){
     // this is gonna be hairy...
     // time to clean up and delete pointers!
-    clog<<"freeing all pointers...";
     for(int i=0;i<ROWS;i++){
         for(int j=0;j<COLS;j++){
             delete[] this->candidates[i][j];
@@ -52,8 +47,6 @@ Board::~Board(){
     delete[] this->board;
     this->candidates=NULL; // prevent dangling pointers
     this->board=NULL; // prevent dangling pointers
-
-    clog<<"done."<<endl;
 }
 
 int** Board::getBoard() {
@@ -80,13 +73,12 @@ void Board::printBoard(bool showCandidates){
       +-----------------------+
      */
     cout<<"+-----------------------+"<<endl;
-    unsigned char ch = '@';
+    unsigned char cand = 'A';
     for(int i=0;i<9;i++){
         if(i%3==0&&i>0){ // print the divider for all but the first iteration.
             cout<<"-------------------------"<<endl;
         }
         for(int j=0;j<9;j++){
-            ch++;
             if(j%3==0){
                 cout<<"| ";
             }
@@ -98,55 +90,30 @@ void Board::printBoard(bool showCandidates){
                 }
             } else {
                 if(this->board[i][j]==0) {
-                    cout<<ch<<" ";
+                    cout<<cand++<<" ";
                 } else {
                     cout<<this->board[i][j]<<" ";
                 }
             }
         }
-
         cout<<"|"<<endl;
     }
     cout<<"+-----------------------+"<<endl;
-}
-
-// the proceeding three functions were inspired by: http://stackoverflow.com/q/9730280/1508101
-// mainly the functions to validate rows, columns and boxes separated...
-
-bool Board::validateRow(int number,int row){
-   for (int i = 0; i < ROWS; i++) {
-        if(this->board[row][i]==number) { // if it exists -- NOT valid
-            return false;
-        }
-    }
-    return true;
-}
-
-bool Board::validateColumn(int number,int col){
-    for (int i = 0; i < COLS; i++) {
-        if(this->board[i][col]==number) { // if it exists -- NOT valid.
-            return false;
-        }
-    }
-    return true;
-}
-
-bool Board::validateBox(int number,int row,int col){
-    int r=(row/3) * 3;
-    int c=(col/3) * 3;
-    for(int i=0;i<3;i++)
-        for(int j=0;j<3;j++)
-            if(this->board[r+i][c+j] > 0 && this->board[r+i][c+j]==number) { // if it exists -- NOT valid.
-                return false;
+    if(!showCandidates) return;
+cand = 'A';
+for (int i = 0; i < ROWS; i ++) {
+    for (int j = 0; j < COLS; j++) {
+        if(this->board[i][j] == 0) {
+            cout << cand++ << ": ";
+            for(int k = 1; k <=9; k++) {
+                if(this->candidates[i][j][k])
+                    cout << " " << k;
             }
-    return true;
+            cout << endl;
+        }
+    }
 }
 
-bool Board::isBoardValid(int number,int row,int col){
-    bool valid = this->board[row][col]==0 && validateBox(number,row,col) &&
-        validateColumn(number,col) && validateRow(number,row);
-
-    return valid;
 }
 
 void Board::solve(){
@@ -182,20 +149,44 @@ void Board::solve(){
             }
         }
     }
-    if(!found) cout<<"No more candidates to eliminate."<<endl;
-
+    cout<<"No more candidates to eliminate."<<endl;
 }
+/*** private functions */
+// the proceeding three functions were inspired by: http://stackoverflow.com/q/9730280/1508101
+// mainly the functions to validate rows, columns and boxes separated...
 
-bool Board::isSolved(){
-    bool solved=true;
-    for(int i=0;i<ROWS;i++){
-        for(int j=0;j<COLS;j++){
-            if(!this->board[i][j]>0){
-                return false;
-            }
+bool Board::validateRow(int number,int row){
+   for (int i = 0; i < ROWS; i++) {
+        if(this->board[row][i]==number) { // if it exists -- NOT valid
+            return false;
         }
     }
     return true;
+}
+
+bool Board::validateColumn(int number,int col){
+    for (int i = 0; i < COLS; i++) {
+        if(this->board[i][col]==number) { // if it exists -- NOT valid.
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Board::validateBox(int number,int row,int col){
+    int r=(row/3) * 3;
+    int c=(col/3) * 3;
+    for(int i=0;i<3;i++)
+        for(int j=0;j<3;j++)
+            if(this->board[r+i][c+j] > 0 && this->board[r+i][c+j]==number) { // if it exists -- NOT valid.
+                return false;
+            }
+    return true;
+}
+
+bool Board::isBoardValid(int number,int row,int col){
+    return this->board[row][col]==0 && this->validateBox(number,row,col) &&
+        this->validateColumn(number,col) && validateRow(number,row);
 }
 
 bool Board::isBoardValid() {
@@ -256,13 +247,14 @@ bool Board::isValidBoxes() {
     return valid;
 }
 
-string Board::getCandidatesFor(char ch,int row,int col){
-    stringstream out;
-    for(int k=0;k<DEPTH;k++){
-        out<<ch<<": ";
-        if(this->candidates[row][col][k]){
-            out<<this->candidates[row][col][k]<<" ";
+bool Board::isSolved(){
+    bool solved=true;
+    for(int i=0;i<ROWS;i++){
+        for(int j=0;j<COLS;j++){
+            if(!this->board[i][j]>0){
+                return false;
+            }
         }
     }
-    return out.str();
+    return true;
 }
