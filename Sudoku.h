@@ -12,7 +12,6 @@ checking candidate values and eliminating them.
 
 class Sudoku{
   public:
-
    /**
     * Handles getting the board from the user and processing it.
     */

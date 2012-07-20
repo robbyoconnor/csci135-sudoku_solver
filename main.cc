@@ -15,20 +15,38 @@ Modifications:
 #define COLS 9
 using namespace std;
 
-string enterDefinites(Sudoku g);
+//function prototypes
+void playGame();
+void printMenu();
 
 int main(int argc,char *argv[]){
     Sudoku sudoku;
-    cout<<"This program will attempt to find the solution to";
-    cout<<"user-defined Sudoku puzzles. If a solution cannot be found,";
-    cout<<"all possible candidates for each cell will be shown."<<endl;
-    cout<<"---------------------------------------------------------------------"<<endl;
-    cout<<"Enter the starting state of the Sudoku puzzle."<<endl;
-    cout<<"line by line with no spaces between each tile."<<endl;
-    cout<<"If a tile is empty, enter \'?\'"<<endl;
-    sudoku.enterBoard();
-    sudoku.printBoard(false);
-    sudoku.solve();
-    sudoku.printBoard(true);
+    cout<<"This program will attempt to solve a user-defined, partially filled out Sudoku puzzle."<<endl;
+    cout<<"In the event that it cannot, all candidates will be listed."<<endl;
+    cout<<"--------------------------------------------------------------------------------------"<<endl;
+    bool done = false;
+    do {
+        cin.clear();
+        cout<<"\n\nPlease use the associated numbers to select your option."<<endl;
+        cout<<"--------------------------------------------------------"<<endl;
+        cout<<"1. Solve a puzzle"<<endl;
+        cout<<"2. Quit"<<endl;
+        cout<<"Selection: ";
+        int answer;
+        cin>>answer;
+        cout<<endl;
+        switch(answer) {
+            case 1:
+                sudoku.enterBoard();
+                sudoku.printBoard(false);
+                sudoku.solve();
+                sudoku.printBoard(true);
+                break;
+            case 2:
+                done = true;
+                break;
+
+        }
+    }while(!done);
     return 0;
 }

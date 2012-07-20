@@ -17,6 +17,9 @@ Modifications:
 using namespace std;
 
 void Sudoku::enterBoard(){
+    cout<<"Enter the starting state of the Sudoku puzzle."<<endl;
+    cout<<"line by line with no spaces between each tile."<<endl;
+    cout<<"If a tile is empty, enter \'?\'"<<endl;
     char c;
     for(int i=0;i<ROWS;i++){
         for(int j=0;j<COLS;j++){
@@ -35,4 +38,3 @@ void Sudoku::solve() {
 void Sudoku::printBoard(bool showCandidates) {
     this->board.printBoard(showCandidates);
 }
-
