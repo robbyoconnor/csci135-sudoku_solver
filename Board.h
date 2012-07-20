@@ -7,6 +7,7 @@ Description: Board class for Sudoku game.
 #ifndef BOARD_H
 #define BOARD_H
 
+ #include <string>
 
 class Board{
   public:
@@ -27,7 +28,7 @@ class Board{
      * @param printCandidates whether or not to print candidates (Default value is false).
      *
      */
-    void printBoard(bool printCandidates,bool debug,int number, int row, int col);
+    void printBoard(bool showCandidates);
 
     /**
      * This function will handle the heavy lifting of checking for candidate values and eliminating those candidates.
@@ -88,36 +89,29 @@ class Board{
     bool isBoardValid(int number, int row, int col);
 
     /**
-     *
-     * This handles recording the candidates that will need to be checked.
-     * Pre-conditions: number is between 1 and 9; row and column are positive and not greater than 9.
-     * Post-condition; The candidate[row][column][number-1] contains a 1.
-     *
-     *
-     * @param number the number to add
-     * @param row the row in the board that this candidate corresponds to
-     * @param col the column that this candidate corresponds to
-     * @param clear flag to tell the function to clear that value. Default value is false; set to true to clear.
+     * Helper function to check the board as a whole automatically.
+     * @return true if the board is valid; false otherwise.
      */
-    void setCandidateValue(int number,int row,int col, bool clear);
+    bool isBoardValid();
 
     /**
-     * This function simply does in one goes through and sees what's not in each row...and adds that number
-     * as a candidate
+     * Checks the rows for validity
+     * @return true if any numbers occur more than once.
      */
-    void initializeCandidates();
-
+    bool isValidRows();
 
     /**
-     * Determines if the given number is a candidate
-     *
-     * Note: row and column may be inverted.
-     * @param number the number to check
-     * @param row the row to check
-     * @param col the column to check
-     * @return true if its a candidate false otherwise.
+     * Checks the rows for validity
+     * @return true if any numbers occur more than once.
      */
-    bool isCandidate(int number, int row, int col);
+    bool isValidCols();
+
+    /**
+     * Checks the rows for validity
+     * @return true if any numbers occur more than once.
+     */
+    bool isValidBoxes();
+
 
     /**
      *
@@ -128,23 +122,11 @@ class Board{
     bool isSolved();
 
     /**
-     * How many candidates are left for a given row, col.
-     * @param row
-     * @param col
-     * @return the number of candidates left
+     * Helper function for printBoard() to get the list of candidates as a string.
+     * @param row the row
+     * @param col the col
      */
-    int getNumberOfCandidatesFor(int row, int col);
-
-    /**
-     * Eliminates candidates if it is a given number.
-     *
-     */
-    void eliminateCandidates();
-
-    /**
-     * If only one candidate exists for a given cell then it is added to the board.
-     */
-    void addDefinitesToBoard();
+    std::string getCandidatesFor(char character, int row,int col);
 
 };
 #endif
