@@ -7,7 +7,6 @@ Modifications:
  ******************************************************************************/
 #include <iostream>
 #include <map>
-#inclide <string>
 #include <ctime>
 #include <cstdlib>
 #include <string>
@@ -94,11 +93,6 @@ void Board::printBoard(bool showCandidates, bool debug, int number, int row, int
             } else { // otherwise we put a place-holder
                 map<Cell,char> map = getPlaceHolders(); // get the placeholders
                 map<Cell,char>::iterator it = map.begin();
-                //for(;it!=map.end();it++)
-
-
-
-
             }
          }
         cout<<"|"<<endl;
