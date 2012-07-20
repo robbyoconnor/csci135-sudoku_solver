@@ -19,3 +19,19 @@ int Cell::getRow() {
 int Cell::getCol() {
     return this->col;
 }
+
+bool Cell::operator<(const Cell& b) const {
+    if(this->row < b.getRow() && this->col < b.getCol()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool Cell::operator==(const Cell &b) const {
+    if(this->row == b.getRow() && this->col == b.getCol()) {
+        return true;
+    } else {
+        return false;
+    }
+}
