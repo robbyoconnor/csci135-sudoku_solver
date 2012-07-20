@@ -121,12 +121,5 @@ class Board{
      */
     bool isSolved();
 
-    /**
-     * Helper function for printBoard() to get the list of candidates as a string.
-     * @param row the row
-     * @param col the col
-     */
-    std::string getCandidatesFor(char character, int row,int col);
-
 };
 #endif
