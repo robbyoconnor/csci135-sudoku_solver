@@ -80,14 +80,13 @@ void Board::printBoard(bool showCandidates){
       +-----------------------+
      */
     cout<<"+-----------------------+"<<endl;
-    std::vector<char> v;// key for placeholders to list candidates.
-    char ch = '@';
+    unsigned char ch = '@';
     for(int i=0;i<9;i++){
         if(i%3==0&&i>0){ // print the divider for all but the first iteration.
             cout<<"-------------------------"<<endl;
         }
         for(int j=0;j<9;j++){
-            ++ch;
+            ch++;
             if(j%3==0){
                 cout<<"| ";
             }
@@ -109,10 +108,6 @@ void Board::printBoard(bool showCandidates){
         cout<<"|"<<endl;
     }
     cout<<"+-----------------------+"<<endl;
-
-    for(int i=0;i<v.size();i++){
-        cout<<v[i]<<endl;
-    }
 }
 
 // the proceeding three functions were inspired by: http://stackoverflow.com/q/9730280/1508101
