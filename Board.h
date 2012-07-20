@@ -7,8 +7,6 @@ Description: Board class for Sudoku game.
 #ifndef BOARD_H
 #define BOARD_H
 
-#include <map>
-#include "Cell.h"
 
 class Board{
   public:
