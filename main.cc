@@ -20,12 +20,12 @@ void playGame();
 void printMenu();
 
 int main(int argc,char *argv[]){
-    Sudoku sudoku;
     cout<<"This program will attempt to solve a user-defined, partially filled out Sudoku puzzle."<<endl;
     cout<<"In the event that it cannot, all candidates will be listed."<<endl;
     cout<<"--------------------------------------------------------------------------------------"<<endl;
     bool done = false;
     do {
+        Sudoku sudoku;
         cin.clear();
         cout<<"\n\nPlease use the associated numbers to select your option."<<endl;
         cout<<"--------------------------------------------------------"<<endl;
